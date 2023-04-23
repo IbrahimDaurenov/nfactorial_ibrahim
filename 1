@@ -1,0 +1,121 @@
+#pragma GCC optimize("Ofast")
+#pragma GCC target("avx,avx2,fma")
+#pragma GCC optimization("unroll-loops")
+#include <bits/stdc++.h>
+#define ll long long
+#define ld long double
+#define fi first
+#define se second
+#define pb push_back
+#define pf push_front
+#define fast_io ios::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+#define pii pair<int, int>
+#define pll pair<ll,ll>
+#define str string
+#define all(x) x.begin(), x.end()
+#define sz(a) (int)a.size()
+
+using namespace std;
+
+class Record {
+public:
+    map <str, str> data;
+
+    void add_value(str key, str value) {
+        data[key] = value;
+    }
+};
+
+//?????????? 1
+bool cmp_age(const Record& a, const Record& b) {
+    return stoi(a.data.at("age")) < stoi(b.data.at("age"));
+}
+//?????????? 2
+bool cmp_salary(const Record& a, const Record& b) {
+    return stod(a.data.at("salary")) < stod(b.data.at("salary"));
+}
+
+class Table {
+public:
+    vector<Record> records;
+
+    void add_record(Record record) {
+        records.pb(record);
+    }
+
+    void sort_by_age() {
+        sort(records.begin(), records.end(), cmp_age);
+    }
+
+    void sort_by_salary() {
+        sort(records.begin(), records.end(), cmp_salary);
+    }
+};
+
+Record input_record() {
+    str name, age, salary;
+    //cout << "Enter name: ";
+    cin >> name;
+    //cout << "Enter age: ";
+    cin >> age;
+    //cout << "Enter salary: ";
+    cin >> salary;
+
+    Record r;
+    r.add_value("name", name);
+    r.add_value("age", age);
+    r.add_value("salary", salary);
+
+    return r;
+}
+
+void print_records(const Table& table) {
+    for (const auto& record : table.records) {
+        for (const auto& entry : record.data) {
+            cout << entry.fi << ": " << entry.se << endl;
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    fast_io
+
+    Table table;
+
+    int n;
+    cout << "Enter the number of users you want to add: ";
+    cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        Record r = input_record();
+        table.add_record(r);
+    }
+
+    int query;
+    do {
+        cout << "Enter your query (1: show all users, 2: sort by age, 3: sort by salary, 4: add user, 0: exit): ";
+        cin >> query;
+
+        switch (query) {
+            case 1:
+                print_records(table);
+                break;
+            case 2:
+                table.sort_by_age();
+                print_records(table);
+                break;
+            case 3:
+                table.sort_by_salary();
+                print_records(table);
+                break;
+            case 4:
+                table.add_record(input_record());
+                break;
+            default:
+                break;
+        }
+    } while (query != 0);
+
+    return 0;
+}
